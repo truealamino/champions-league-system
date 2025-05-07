@@ -23,8 +23,8 @@ export default function Home() {
           Champions League Sorocaba
         </h1>
         <p className="mt-4 max-w-xl text-lg md:text-xl drop-shadow-md">
-          Organize seus campeonatos como a UEFA. Cadastramento de times,
-          fases, jogadores e jogos com estatísticas completas.
+          Organize seus campeonatos como a UEFA. Cadastramento de times, fases,
+          jogadores e jogos com estatísticas completas.
         </p>
 
         <a
