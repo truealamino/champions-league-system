@@ -1,4 +1,3 @@
-// apps/frontend/app/page.tsx (App Router)
 export default function Home() {
   return (
     <div className="relative min-h-screen text-white">
@@ -9,6 +8,22 @@ export default function Home() {
           alt="Champions Background"
           className="object-cover w-full h-full opacity-60"
         />
+      </div>
+
+      {/* Navbar */}
+      <div className="absolute top-0 right-0 z-20 p-6 flex gap-4">
+        <a
+          href="/auth/login"
+          className="px-5 py-2 border border-white rounded-full text-white hover:bg-blue-950 hover:text-white transition font-medium"
+        >
+          Login
+        </a>
+        <a
+          href="/auth/signup"
+          className="px-5 py-2 border border-white rounded-full text-white hover:bg-blue-950 hover:text-white transition font-medium"
+        >
+          Cadastro
+        </a>
       </div>
 
       {/* Overlay content */}
