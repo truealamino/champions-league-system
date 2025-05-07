@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // pegue do Supabase
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum ChampionshipType {
+  Champions
+  WorldCup
+}
+
+enum PhaseType {
+  Group
+  Knockout
+  Final
+  Classification
+}
+
+model Player {
+  id         String        @id @default(uuid())
+  name       String
+  position   String?
+  birthDate  DateTime?
+  teamLinks  TeamPlayer[]
+  statistics Statistic[]
+}
+
+model Team {
+  id            String          @id @default(uuid())
+  name          String
+  country       String?
+  playerLinks   TeamPlayer[]
+  championshipTeams ChampionshipTeam[]
+  gameTeams     GameTeam[]
+  statistics    Statistic[]
+}
+
+model TeamPlayer {
+  id        String   @id @default(uuid())
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  year      Int
+
+  @@unique([playerId, teamId, year])
+}
+
+model Championship {
+  id        String              @id @default(uuid())
+  name      String
+  year      Int
+  type      ChampionshipType
+  teams     ChampionshipTeam[]
+  phases    Phase[]
+}
+
+model ChampionshipTeam {
+  id              String         @id @default(uuid())
+  championship    Championship   @relation(fields: [championshipId], references: [id])
+  championshipId  String
+  team            Team           @relation(fields: [teamId], references: [id])
+  teamId          String
+
+  @@unique([championshipId, teamId])
+}
+
+model Phase {
+  id              String        @id @default(uuid())
+  name            String
+  type            PhaseType
+  order           Int
+  championship    Championship @relation(fields: [championshipId], references: [id])
+  championshipId  String
+  games           Game[]
+}
+
+model Game {
+  id              String     @id @default(uuid())
+  date            DateTime
+  description     String?
+  phase           Phase      @relation(fields: [phaseId], references: [id])
+  phaseId         String
+  homePlaceholder String?
+  awayPlaceholder String?
+  teams           GameTeam[]
+  statistics      Statistic[]
+}
+
+model GameTeam {
+  id       String  @id @default(uuid())
+  game     Game    @relation(fields: [gameId], references: [id])
+  gameId   String
+  team     Team?   @relation(fields: [teamId], references: [id])
+  teamId   String?
+  isHome   Boolean
+}
+
+model Statistic {
+  id        String   @id @default(uuid())
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  goals           Int     @default(0)
+  assists         Int     @default(0)
+  yellowCards     Int     @default(0)
+  redCards        Int     @default(0)
+  tackles         Int     @default(0)
+  minutesPlayed   Int     @default(0)
+
+  @@unique([playerId, gameId])
+}
