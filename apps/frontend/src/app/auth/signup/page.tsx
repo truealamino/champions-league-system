@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signupUser } from '../../../../lib/usersApi';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -22,18 +23,7 @@ export default function SignupPage() {
     setError('');
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || 'Erro ao registrar usuário');
-      }
-
-      // Redireciona para login após cadastro
+      await signupUser(form);
       router.push('/auth/login');
     } catch (err: any) {
       setError(err.message || 'Erro inesperado');

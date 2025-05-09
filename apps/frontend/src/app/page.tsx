@@ -43,7 +43,7 @@ export default function Home() {
         </p>
 
         <a
-          href="/dashboard"
+          href="/admin"
           className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-full text-white text-lg font-semibold transition"
         >
           Começar agora

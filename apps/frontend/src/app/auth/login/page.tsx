@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { loginUser } from '../../../../lib/usersApi';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,7 +12,7 @@ export default function LoginPage() {
   useEffect(() => {
     // Se já estiver logado, redireciona
     const token = localStorage.getItem('token');
-    if (token) router.push('/dashboard');
+    if (token) router.push('/admin');
   }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,20 +24,9 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || 'Erro ao fazer login');
-      }
-
-      const data = await res.json();
+      const data = await loginUser(form);
       localStorage.setItem('token', data.access_token); // persistência do JWT
-      router.push('/dashboard');
+      router.push('/admin');
     } catch (err: any) {
       setError(err.message || 'Erro inesperado');
     }
