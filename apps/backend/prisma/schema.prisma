@@ -51,6 +51,7 @@ model Team {
   championshipTeams ChampionshipTeam[]
   gameTeams     GameTeam[]
   statistics    Statistic[]
+  logoUrl       String?
 }
 
 model TeamPlayer {
