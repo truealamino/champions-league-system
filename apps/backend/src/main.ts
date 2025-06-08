@@ -8,7 +8,7 @@ async function bootstrap() {
   const adapter: FastifyAdapter = new FastifyAdapter();
   const app: NestFastifyApplication = await NestFactory.create(AppModule, adapter);
   app.enableCors({
-    origin: 'http://localhost:3000', // ou ['http://localhost:3000'] para múltiplas origens
+    origin: process.env.enable_cors, // ou ['http://localhost:3000'] para múltiplas origens
     credentials: true,
   });
 
@@ -17,6 +17,6 @@ async function bootstrap() {
     root: path.resolve(__dirname, '../../uploads'),
     prefix: '/uploads/', // Acessível via http://localhost:3005/uploads/filename.png
   });
-  await app.listen(process.env.PORT ?? 3005);
+  await app.listen(process.env.PORT ?? 3005, '0.0.0.0');
 }
 bootstrap();
