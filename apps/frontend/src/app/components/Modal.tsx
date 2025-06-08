@@ -11,7 +11,7 @@ export default function Modal({ open, onClose, children, title }: ModalProps) {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
+      <div className="bg-[#132257] p-6 rounded shadow-lg w-full max-w-md relative text-white">
         {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
         <button
           onClick={onClose}
