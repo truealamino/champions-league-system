@@ -44,7 +44,7 @@ export default function TeamsPage() {
       const data = await getTeams();
       setTeams(data);
     } catch (err) {
-      if (err instanceof Error) setError(err.message || "Erro inesperado");
+      if (err instanceof Error) setError(err.message);
       else setError("Erro inesperado");
     } finally {
       setLoading(false);
@@ -68,8 +68,9 @@ export default function TeamsPage() {
       setForm({ name: "", country: "" });
       setEditingTeam(null);
       setModalOpen(false);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Erro inesperado");
     } finally {
       setCreating(false);
     }
@@ -94,8 +95,9 @@ export default function TeamsPage() {
     try {
       await deleteTeam(id);
       setTeams((prev) => prev.filter((t) => t.id !== id));
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err) {
+      if (err instanceof Error) alert(err.message);
+      else alert("Erro inesperado");
     }
   };
 

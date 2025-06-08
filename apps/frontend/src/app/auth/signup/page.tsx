@@ -1,32 +1,35 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { signupUser } from '../../../../lib/usersApi';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signupUser } from "../../../../lib/usersApi";
 
 export default function SignupPage() {
   const router = useRouter();
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'USER', // valor padrão
+    name: "",
+    email: "",
+    password: "",
+    role: "USER" // valor padrão
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       await signupUser(form);
-      router.push('/auth/login');
-    } catch (err: any) {
-      setError(err.message || 'Erro inesperado');
+      router.push("/auth/login");
+    } catch (err) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Erro inesperado");
     }
   };
 

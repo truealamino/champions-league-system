@@ -6,6 +6,7 @@ import {
   faUsers,
   faShirt
 } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 export default function AdminLayout({
   children
@@ -69,7 +70,7 @@ function SidebarLink({
   children
 }: {
   href: string;
-  icon: any;
+  icon: IconDefinition;
   children: React.ReactNode;
 }) {
   return (

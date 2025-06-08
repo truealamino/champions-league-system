@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { loginUser } from '../../../../lib/usersApi';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { loginUser } from "../../../../lib/usersApi";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
 
   useEffect(() => {
     // Se já estiver logado, redireciona
-    const token = localStorage.getItem('token');
-    if (token) router.push('/admin');
+    const token = localStorage.getItem("token");
+    if (token) router.push("/admin");
   }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,14 +21,15 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       const data = await loginUser(form);
-      localStorage.setItem('token', data.access_token); // persistência do JWT
-      router.push('/admin');
-    } catch (err: any) {
-      setError(err.message || 'Erro inesperado');
+      localStorage.setItem("token", data.access_token); // persistência do JWT
+      router.push("/admin");
+    } catch (err) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Erro inesperado");
     }
   };
 
