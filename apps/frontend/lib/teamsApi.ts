@@ -9,7 +9,7 @@ export type Team = {
   logoUrl?: string;
 };
 
-export async function getTeams(token: string): Promise<Team[]> {
+export async function getTeams(): Promise<Team[]> {
   const res = await authFetch(`${API_URL}/teams`);
   if (!res) return [];
 
@@ -17,10 +17,11 @@ export async function getTeams(token: string): Promise<Team[]> {
   return res.json();
 }
 
-export async function createTeam(
-  team: { name: string; country?: string; logo?: File },
-  token: string
-) {
+export async function createTeam(team: {
+  name: string;
+  country?: string;
+  logo?: File;
+}) {
   const formData = new FormData();
   formData.append("name", team.name);
   if (team.country) formData.append("country", team.country);
@@ -28,9 +29,6 @@ export async function createTeam(
 
   const res = await fetch(`${API_URL}/teams`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
     body: formData
   });
 
@@ -44,8 +42,7 @@ export async function createTeam(
 
 export async function updateTeam(
   id: string,
-  team: { name: string; country?: string; logo?: File },
-  token: string
+  team: { name: string; country?: string; logo?: File }
 ) {
   const formData = new FormData();
   formData.append("name", team.name);
@@ -54,10 +51,6 @@ export async function updateTeam(
 
   const res = await fetch(`${API_URL}/teams/${id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
     body: formData
   });
 
@@ -69,12 +62,9 @@ export async function updateTeam(
   return res.json();
 }
 
-export async function deleteTeam(id: string, token: string) {
+export async function deleteTeam(id: string) {
   const res = await fetch(`${API_URL}/teams/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+    method: "DELETE"
   });
 
   if (!res.ok) throw new Error("Erro ao deletar time");

@@ -10,6 +10,7 @@ import {
 import Modal from "../../../components/Modal";
 import DataTable from "../../../components/DataTable";
 import ActionButtons from "../../../components/ActionButtons";
+import Image from "next/image";
 
 type Team = {
   id: string;
@@ -40,11 +41,11 @@ export default function TeamsPage() {
   const fetchTeams = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token") || "";
-      const data = await getTeams(token);
+      const data = await getTeams();
       setTeams(data);
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado");
+    } catch (err) {
+      if (err instanceof Error) setError(err.message || "Erro inesperado");
+      else setError("Erro inesperado");
     } finally {
       setLoading(false);
     }
@@ -52,16 +53,15 @@ export default function TeamsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem("token") || "";
 
     try {
       setCreating(true);
       setError("");
 
       if (editingTeam) {
-        await updateTeam(editingTeam.id, form, token);
+        await updateTeam(editingTeam.id, form);
       } else {
-        await createTeam(form, token);
+        await createTeam(form);
       }
 
       await fetchTeams();
@@ -92,8 +92,7 @@ export default function TeamsPage() {
     if (!confirm) return;
 
     try {
-      const token = localStorage.getItem("token") || "";
-      await deleteTeam(id, token);
+      await deleteTeam(id);
       setTeams((prev) => prev.filter((t) => t.id !== id));
     } catch (err: any) {
       alert(err.message);
@@ -198,13 +197,15 @@ export default function TeamsPage() {
               label: "Logo",
               accessor: "logoUrl",
               render: (team) => (
-                <img
+                <Image
                   src={
                     team.logoUrl
                       ? `${API_URL}${team.logoUrl}`
                       : "/images/default-team.png"
                   }
                   alt="Logo"
+                  width={48}
+                  height={48}
                   className="w-12 h-12 object-contain border rounded bg-gray-50"
                 />
               )
